@@ -8,8 +8,8 @@ var Twitter = require('twit'),
 var marco = new Twitter({ consumer_key: config.consumer_key, consumer_secret: config.consumer_secret, access_token: config.marco_access_token, access_token_secret: config.marco_access_token_secret }),
     polo = new Twitter({ consumer_key: config.consumer_key, consumer_secret: config.consumer_secret, access_token: config.polo_access_token, access_token_secret: config.polo_access_token_secret })
 
-// Setup empty arrays to store parts of speech (global for a neat mapping hack)
-var JJ = [], JJR = [], JJS = [], NN = [], NNP = [], NNPS = [], NNS = [], RB = [], RBR = [], RBS = [], RP = [], VB = [], VBD = [], VBG = [], VBN = [], VBP = [], VBZ = []
+// Setup empty arrays to store parts of speech (staying global for a neat mapping hack)
+var parts = { "JJ": [], "JJR": [], "JJS": [], "NN": [], "NNP": [], "NNPS": [], "NNS": [], "RB": [], "RBR": [], "RBS": [], "RP": [], "VB": [], "VBD": [], "VBG": [], "VBN": [], "VBP": [], "VBZ": [] }
     
 // A helpful public method for arrays
 var flatten = function(array){
@@ -48,7 +48,7 @@ var listen = marco.stream('user')
               part = tag[1]
           
           // Sort the array by part of speech
-          var pos = process[part]
+          var pos = parts[part]
           if (pos) pos.push(word)
         }
       }
@@ -64,9 +64,9 @@ var listen = marco.stream('user')
             part = tag[1]
         
         // Swap out words with a bit of randomization
-        if (Math.random() <= .15) {
+        if (Math.random() <= .5) {
           // Get a random word by part of speech
-          var pos = process[part]
+          var pos = parts[part]
           if (pos) words[k][0] = pos[Math.floor(Math.random() * pos.length)]
         }
       }
@@ -77,14 +77,13 @@ var listen = marco.stream('user')
         words[l].splice(1,1)
       }
       
-      var words = flatten(words)
-      console.log(words)
+      var words = flatten(words),
           text = ent.decode(words.join(' ').replace(/@/g, '').substring(0, 140))
       
       // Polo tweets a new message
       console.log("Tweeting... \n" + text)
       polo.post('statuses/update', { status: text }, function(err, reply) {
-        console.log(err)
+        if (err) console.log(err)
       })
     }
   })
