@@ -25,7 +25,7 @@ var flatten = function(array){
 var listen = marco.stream('user')
 // listen.on('tweet', function(tweet) {
   // Grab Marco's last 10 tweets (using polo's account to exclude replies)
-  polo.get('statuses/user_timeline', { screen_name: 'JacksonGariety', count: 10, exclude_replies: true }, function(err, tweets) {
+  polo.get('statuses/user_timeline', { screen_name: 'JacksonGariety', count: 25, exclude_replies: true }, function(err, tweets) {
     var tweet = tweets.shift(),
         i = tweets.length
     
@@ -33,7 +33,7 @@ var listen = marco.stream('user')
       // A simple script to get a random word by its part of speech
       function getRandom(pos) {
         var index = pos[Math.floor(Math.random() * pos.length)]
-        return pos[index]
+        return index
       }
       
       // Loop through the words in the historic tweets
@@ -49,7 +49,13 @@ var listen = marco.stream('user')
           
           // Sort the array by part of speech
           var pos = parts[part]
-          if (pos) pos.push(word)
+          if (pos) {
+            if (word.match(/(^|\W+)\@([\w\-]+)/gm)) {
+              pos.push(getRandom(config.people))
+            } else if (config.blacklist.indexOf(word) == -1) {
+              pos.push(word)
+            }
+          }
         }
       }
       
@@ -64,9 +70,14 @@ var listen = marco.stream('user')
             part = tag[1]
         
         // Swap out words with a bit of randomization
-        if (Math.random() <= .5) {
+        var pos = parts[part]
+        if ([".", ",", ";", "—"].indexOf(word) != -1) {
+          words[words.indexOf(tag) - 1][0] += word
+          words[words.indexOf(tag)] = ["", ""]
+        } else if (words[k][0].match(/(^|\W+)\@([\w\-]+)/gm)) {
+          words[k][0] = getRandom(config.people)
+        } else if (Math.random() <= .33) {
           // Get a random word by part of speech
-          var pos = parts[part]
           if (pos) words[k][0] = pos[Math.floor(Math.random() * pos.length)]
         }
       }
@@ -75,16 +86,19 @@ var listen = marco.stream('user')
       var l = words.length
       while (l--) {
         words[l].splice(1,1)
+        if (words[l][0] == '') words[l].splice(0,1)
+        console.log(words[l])
       }
       
-      var words = flatten(words),
-          text = ent.decode(words.join(' ').replace(/@/g, '').substring(0, 140))
+      var text = ent.decode(flatten(words).join(' ').substring(0, 140))
       
       // Polo tweets a new message
       console.log("Tweeting... \n" + text)
+/*
       polo.post('statuses/update', { status: text }, function(err, reply) {
         if (err) console.log(err)
       })
+*/
     }
   })
 // })

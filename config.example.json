@@ -4,5 +4,6 @@
   "marco_access_token": "",
   "marco_access_token_secret": "",
   "polo_access_token": "",
-  "polo_access_token_secret": ""
+  "polo_access_token_secret": "",
+  "people": ["Jacob Thornton", "iano"]
 }
