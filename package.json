@@ -2,8 +2,9 @@
   "name": "MockingJS",
   "version": "0.0.1",
   "author": "Jackson Gariety <personal@jacksongariety.com>",
-  "devDependencies": {
+  "dependencies": {
     "twit": "~1.1.9",
-    "pos": "~0.1.2"
+    "pos": "~0.1.2",
+    "ent": "~0.1.0"
   }
 }
