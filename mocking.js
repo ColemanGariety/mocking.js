@@ -70,7 +70,7 @@ listen.on('tweet', function(tweet) {
       text = words.join(" ")
       
       // Polo tweets a new message
-      polo.post('statueses/update', { status: text }, function(err, reply) {
+      polo.post('statuses/update', { status: text }, function(err, reply) {
         if (err) {
           console.log(err)
           return false
