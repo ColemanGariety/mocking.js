@@ -11,7 +11,7 @@ var marco = new Twitter({ consumer_key: config.consumer_key, consumer_secret: co
 // Setup empty arrays to store parts of speech (staying global for a neat mapping hack)
 var parts = { "JJ": [], "JJR": [], "JJS": [], "NN": [], "NNP": [], "NNPS": [], "NNS": [], "RB": [], "RBR": [], "RBS": [], "RP": [], "VB": [], "VBD": [], "VBG": [], "VBN": [], "VBP": [], "VBZ": [] }
     
-// A helpful public method for arrays
+// A helpful public method for flattening multidimensional arrays
 var flatten = function(array){
   var flat = [];
   for (var i = 0, l = array.length; i < l; i++){
@@ -24,9 +24,9 @@ var flatten = function(array){
 // Listen for marco's tweets
 var listen = marco.stream('user')
 listen.on('tweet', function(tweet) {
-  if (tweet.user.id == 248558843 && tweet.text.substring(0,18) != "RT @TheRealGariety") {
+  if (tweet.user.id == 248558843 && tweet.text.substring(0,18) != "RT @" + config.polo_screen_name) {
     // Grab Marco's last 25 tweets (using polo's account to exclude replies)
-    polo.get('statuses/user_timeline', { screen_name: 'JacksonGariety', count: 25, exclude_replies: true }, function(err, tweets) {
+    polo.get('statuses/user_timeline', { screen_name: config.marco_screen_name, count: 25, exclude_replies: true }, function(err, tweets) {
       var tweet = tweets.shift(),
           i = tweets.length
       

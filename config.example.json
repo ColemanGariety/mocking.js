@@ -5,5 +5,8 @@
   "marco_access_token_secret": "",
   "polo_access_token": "",
   "polo_access_token_secret": "",
-  "people": ["Jacob Thornton", "iano"]
+  "marco_screen_name": "JacksonGariety",
+  "polo_screen_name": "TheRealGariety",
+  "people": ["Jacob Thornton", "iano"],
+  "blacklist": ["I", "i", "a", "A"]
 }
