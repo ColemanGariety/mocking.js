@@ -30,8 +30,6 @@ listen.on('tweet', function(tweet) {
       var tweet = tweets.shift(),
           i = tweets.length
       
-      console.log(tweet)
-      
       if (i) {
         // A simple script to get a random word by its part of speech
         function getRandom(pos) {
