@@ -94,11 +94,9 @@ var listen = marco.stream('user')
       
       // Polo tweets a new message
       console.log("Tweeting... \n" + text)
-/*
       polo.post('statuses/update', { status: text }, function(err, reply) {
         if (err) console.log(err)
       })
-*/
     }
   })
 // })
