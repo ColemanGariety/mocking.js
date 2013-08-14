@@ -24,7 +24,7 @@ var flatten = function(array){
 // Listen for marco's tweets
 var listen = marco.stream('user')
 listen.on('tweet', function(tweet) {
-  if (tweet.user.id == 248558843) {
+  if (tweet.user.id == 248558843 && tweet.text.substring(0,18) != "RT @TheRealGariety") {
     // Grab Marco's last 25 tweets (using polo's account to exclude replies)
     polo.get('statuses/user_timeline', { screen_name: 'JacksonGariety', count: 25, exclude_replies: true }, function(err, tweets) {
       var tweet = tweets.shift(),
