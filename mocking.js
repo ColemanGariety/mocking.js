@@ -62,7 +62,8 @@ listen.on('tweet', function(tweet) {
           else if (part == "NN" || part == "NNP") { pos = nouns }
           else if (part == "VB") { pos = verbs }
           
-          words[k] = pos[Math.floor(Math.random() * adjectives.length)]
+          // Get a random word by part of speech
+          words[k] = pos[Math.floor(Math.random() * pos.length)]
         }
       }
       
