@@ -23,7 +23,7 @@ var flatten = function(array){
 
 // Listen for marco's tweets
 var listen = marco.stream('user')
-// listen.on('tweet', function(tweet) {
+listen.on('tweet', function(tweet) {
   // Grab Marco's last 10 tweets (using polo's account to exclude replies)
   polo.get('statuses/user_timeline', { screen_name: 'JacksonGariety', count: 25, exclude_replies: true }, function(err, tweets) {
     var tweet = tweets.shift(),
@@ -58,6 +58,8 @@ var listen = marco.stream('user')
           }
         }
       }
+      
+      console.log(tweet)
       
       // Loop through words in the present tweet
       var lexicon = new Pos.Lexer().lex(tweet.text),
@@ -99,4 +101,4 @@ var listen = marco.stream('user')
       })
     }
   })
-// })
+})
