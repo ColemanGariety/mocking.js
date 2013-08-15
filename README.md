@@ -35,6 +35,8 @@ The Twitter application listens for Marco's tweets and forwards them to Polo's a
 2. Install dependencies
    - `npm install`
 3. Setup an application on [dev.twitter.com](http://dev.twitter.com/)
+   - Generate consumer keys
+   - Change `read only` to `read and write`
 4. Get two Twitter access tokens, one for Marco and one for Polo
    - `gem install twitter_oauth`
    - `wget https://gist.github.com/mirakui/388067/raw/30639089bf4cf3be179c48b1e7f623eb68ba1552/make_token.rb`
