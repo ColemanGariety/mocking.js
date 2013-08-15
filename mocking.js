@@ -26,7 +26,7 @@ var listen = marco.stream('user')
 listen.on('tweet', function(tweet) {
   if (tweet.user.id == 248558843 && tweet.text.substring(0,18) != "RT @" + config.polo_screen_name) {
     // Grab Marco's last 25 tweets (using polo's account to exclude replies)
-    polo.get('statuses/user_timeline', { screen_name: config.marco_screen_name, count: 25, exclude_replies: true }, function(err, tweets) {
+    polo.get('statuses/user_timeline', { screen_name: config.marco_screen_name, count: 25, exclude_replies: false }, function(err, tweets) {
       var tweet = tweets.shift(),
           i = tweets.length
       
