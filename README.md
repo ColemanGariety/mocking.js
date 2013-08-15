@@ -32,17 +32,19 @@ The Twitter application listens for Marco's tweets and forwards them to Polo's a
 1. Clone the repo
    - `git clone git@github.com:JacksonGariety/MockingJS.git`
    - `cd MockingJS`
-2. Setup an application on [dev.twitter.com](http://dev.twitter.com/)
-3. Get two Twitter access tokens, one for Marco and one for Polo
+2. Install dependencies
+   - `npm install`
+3. Setup an application on [dev.twitter.com](http://dev.twitter.com/)
+4. Get two Twitter access tokens, one for Marco and one for Polo
    - `gem install twitter_oauth`
    - `wget https://gist.github.com/mirakui/388067/raw/30639089bf4cf3be179c48b1e7f623eb68ba1552/make_token.rb`
    - Sign into Marco's account
    - `ruby make_token.rb`
    - Sign into Polo's account
    - `ruby make_token.rb`
-4. Put your app's consumer keys (acquired in step 2), Marco's access tokens, and Polo's access tokens (each acquired in step 3) into `config.example.json`
+5. Put your app's consumer keys (acquired in step 2), Marco's access tokens, and Polo's access tokens (each acquired in step 3) into `config.example.json`
    - `nano config.example.json`
    - `mv config.example.json config.json`
-5. Start your application
+6. Start your application
    - `nohup node mocking.js`
    - Let the bot run as long as you want, `nohup` lets you close the shell session!
