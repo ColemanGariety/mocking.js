@@ -68,7 +68,7 @@ listen.on('tweet', function(tweet) {
         }
         
         // Search for relevant tweets so we can get some users to @mention
-        polo.get('search/tweets', { q: queryArray[Math.floor(Math.random() * queryArray.length)], count: 46 }, function(err, res) {
+        polo.get('search/tweets', { q: queryArray[Math.floor(Math.random() * queryArray.length)], count: 5 }, function(err, res) {
           if (err) {
             console.log(err)
             return false
