@@ -7,6 +7,6 @@
   "polo_access_token_secret": "",
   "marco_screen_name": "JacksonGariety",
   "polo_screen_name": "TheRealGariety",
-  "people": ["Jacob Thornton", "iano"],
-  "blacklist": ["I", "i", "a", "A"]
+  "people": ["@emwatson", "@justinbieber", "@katyperry", "@BarackObama", "@jtimberlake", ""],
+  "blacklist": ["i", "a", ".a", "it's", "RT", "AM", "PM", "MT", "an", "the"]
 }
