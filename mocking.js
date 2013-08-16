@@ -64,7 +64,6 @@ listen.on('tweet', function(tweet) {
             people.push(tweets[k].user.screen_name)
           }
           
-          
           while (l--) { // Loop through words in the present tweet
             var tag = words[l],
                 word = tag[0],
@@ -79,6 +78,11 @@ listen.on('tweet', function(tweet) {
               tweet.text = tweet.text.replace(words[l][0], pos[Math.floor(Math.random() * pos.length)])
             }
           }
+          
+          // Prevent the tweet from being a reply
+          if (tweet.text.charAt(0) == "@") tweet.text = "Hey, " + tweet.text
+          // Truncate at 140 characters
+          tweet.text = tweet.text.slice(0, 140)
           
           // Polo tweets a new message
           console.log("Tweeting... \n" + tweet.text)
