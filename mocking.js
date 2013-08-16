@@ -24,19 +24,13 @@ var flatten = function(array){
 // Listen for marco's tweets
 var listen = marco.stream('user')
 listen.on('tweet', function(tweet) {
-  if (tweet.user.id == 248558843 && tweet.text.substring(0,18) != "RT @" + config.polo_screen_name) {
+  if (tweet.text.substring(0,18) != "RT @" + config.polo_screen_name) {
     // Grab Marco's last 25 tweets (using polo's account to exclude replies)
     polo.get('statuses/user_timeline', { screen_name: config.marco_screen_name, count: 25, exclude_replies: false }, function(err, tweets) {
       var tweet = tweets.shift(),
           i = tweets.length
       
       if (i) {
-        // A simple script to get a random word by its part of speech
-        function getRandom(pos) {
-          var index = pos[Math.floor(Math.random() * pos.length)]
-          return index
-        }
-        
         // Loop through the words in the historic tweets
         while (i--) {
           var lexicon = new Pos.Lexer().lex(tweets[i].text),
@@ -52,7 +46,7 @@ listen.on('tweet', function(tweet) {
             var pos = parts[part]
             if (pos) {
               if (word.match(/(^|\W+)\@([\w\-]+)/gm)) {
-                pos.push(getRandom(config.people))
+                pos.push(config.people[Math.floor(Math.random() * config.people.length)])
               } else if (config.blacklist.indexOf(word) == -1) {
                 pos.push(word)
               }
@@ -76,26 +70,16 @@ listen.on('tweet', function(tweet) {
             words[words.indexOf(tag) - 1][0] += word
             words[words.indexOf(tag)] = ["", ""]
           } else if (words[k][0].match(/(^|\W+)\@([\w\-]+)/gm)) {
-            words[k][0] = getRandom(config.people)
-          } else if (Math.random() <= .33) {
-            // Get a random word by part of speech
-            if (pos) words[k][0] = pos[Math.floor(Math.random() * pos.length)]
+            tweet.text.replace(words[k][0], config.people[Math.floor(Math.random() * config.people.length)])
+          } else if (Math.random() <= .33 && pos) {
+            // Get a random word by part of speech and replace the original tweet with it
+            tweet.text.replace(words[k][0], pos[Math.floor(Math.random() * pos.length)]
           }
         }
         
-        // De-lexify it
-        var l = words.length
-        while (l--) {
-          words[l].splice(1,1)
-          if (words[l][0] == '') words[l].splice(0,1)
-          console.log(words[l])
-        }
-        
-        var text = ent.decode(flatten(words).join(' ').substring(0, 140))
-        
         // Polo tweets a new message
         console.log("Tweeting... \n" + text)
-        polo.post('statuses/update', { status: text }, function(err, reply) {
+        polo.post('statuses/update', { status: tweet.text }, function(err, reply) {
           if (err) console.log(err)
         })
       }
