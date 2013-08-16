@@ -52,7 +52,7 @@ listen.on('tweet', function(tweet) {
             k = words.length,
             l = words.length
             queryNouns = [],
-            queryArray
+            queryArray = null
         
         // Loop over words in present tweet to make a query
         while(l--) {
@@ -60,14 +60,15 @@ listen.on('tweet', function(tweet) {
           if (words[l][1] == "NN") queryNouns.push(words[l][0])
         }
         
+        // Find some relevant nouns
         if (queryNouns.length) {
-          queryArray = queryNouns
+          queryArray = queryNouns // Use nouns from marco's present tweet if they exist
         } else {
-          queryArray = parts["NN"]
+          queryArray = parts["NN"] // Otherwise just grab one of marco's historic noun
         }
         
-        // Search for relevant tweets
-        polo.get('search/tweets', { q: query, count: 46 }, function(err, res) {
+        // Search for relevant tweets so we can get some users to @mention
+        polo.get('search/tweets', { q: queryArray[Math.floor(Math.random() * queryArray.length)], count: 46 }, function(err, res) {
           if (err) {
             console.log(err)
             return false
@@ -75,8 +76,8 @@ listen.on('tweet', function(tweet) {
 
           var tweets = res.statuses,
               m = tweets.length
-          while (m--) { // Loop over the tweets and save the users
-            people.push(tweets[m].user.screen_name)
+          while (m--) { // Loop over the tweets
+            if (tweets[m].user.screen_name != config.marco_screen_name) people.push(tweets[m].user.screen_name) // Save the persons's handle unless they're marco
           }
           
           while (k--) { // Loop through words in the present tweet
@@ -86,10 +87,10 @@ listen.on('tweet', function(tweet) {
             
             // Swap out words with a bit of randomization
             var pos = parts[part]
-            if (words[k][0].match(mention)) { // If it's an @mention change it to one of the users we grabbed before
+            if (words[k][0].match(mention)) { // If it's an @mention swap it for one of the users we grabbed before
               tweet.text = tweet.text.replace(words[k][0], "@" + people[Math.floor(Math.random() * people.length)])
             } else if (Math.random() <= .66 && pos) {
-              // Get a random word by part of speech and replace the original tweet with it
+              // Get a random word by part of speech and do a find & replace on the original tweet
               tweet.text = tweet.text.replace(words[k][0], pos[Math.floor(Math.random() * pos.length)])
             }
           }
