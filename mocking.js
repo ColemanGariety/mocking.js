@@ -24,7 +24,7 @@ var flatten = function(array){
 // Listen for marco's tweets
 var listen = marco.stream('user')
 listen.on('tweet', function(tweet) {
-  if (tweet.text.substring(0,18) != "RT @" + config.polo_screen_name) {
+  if (tweet.user.screen_name == marco.screen_name && tweet.text.substring(0,18) != "RT @" + config.polo_screen_name) {
     // Grab Marco's last 25 tweets (using polo's account to exclude replies)
     polo.get('statuses/user_timeline', { screen_name: config.marco_screen_name, count: 25, exclude_replies: false }, function(err, tweets) {
       var tweet = tweets.shift(),
