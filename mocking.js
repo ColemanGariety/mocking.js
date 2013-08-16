@@ -49,33 +49,48 @@ listen.on('tweet', function(tweet) {
         // Lexify & tag the present tweet
         var lexicon = new Pos.Lexer().lex(tweet.text),
             words = new Pos.Tagger().tag(lexicon),
+            k = words.length,
             l = words.length
+            queryNouns = [],
+            queryArray
+        
+        // Loop over words in present tweet to make a query
+        while(l--) {
+          // Add nouns to queryNouns array
+          if (words[l][1] == "NN") queryNouns.push(words[l][0])
+        }
+        
+        if (queryNouns.length) {
+          queryArray = queryNouns
+        } else {
+          queryArray = parts["NN"]
+        }
         
         // Search for relevant tweets
-        polo.get('search/tweets', { q: parts["NN"][Math.floor(Math.random() * parts["NN"].length)], count: 46 }, function(err, res) {
+        polo.get('search/tweets', { q: query, count: 46 }, function(err, res) {
           if (err) {
             console.log(err)
             return false
           }
 
           var tweets = res.statuses,
-              k = tweets.length
-          while (k--) { // Loop over the tweets and save the users
-            people.push(tweets[k].user.screen_name)
+              m = tweets.length
+          while (m--) { // Loop over the tweets and save the users
+            people.push(tweets[m].user.screen_name)
           }
           
-          while (l--) { // Loop through words in the present tweet
-            var tag = words[l],
+          while (k--) { // Loop through words in the present tweet
+            var tag = words[k],
                 word = tag[0],
                 part = tag[1]
             
             // Swap out words with a bit of randomization
             var pos = parts[part]
-            if (words[l][0].match(mention)) { // If it's an @mention change it to one of the users we grabbed before
-              tweet.text = tweet.text.replace(words[l][0], "@" + people[Math.floor(Math.random() * people.length)])
+            if (words[k][0].match(mention)) { // If it's an @mention change it to one of the users we grabbed before
+              tweet.text = tweet.text.replace(words[k][0], "@" + people[Math.floor(Math.random() * people.length)])
             } else if (Math.random() <= .66 && pos) {
               // Get a random word by part of speech and replace the original tweet with it
-              tweet.text = tweet.text.replace(words[l][0], pos[Math.floor(Math.random() * pos.length)])
+              tweet.text = tweet.text.replace(words[k][0], pos[Math.floor(Math.random() * pos.length)])
             }
           }
           
