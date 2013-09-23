@@ -41,7 +41,7 @@ listen.on('tweet', function(tweet) {
             
             // Sort the array by part of speech
             if (parts[part] && blacklist.concat(parts[part]).indexOf(word.toLowerCase()) == -1 && !word.match(mention)) {
-              parts[part].push(word)
+              parts[part].push(word.replace(/"|:/g, ''))
             }
           }
         }
