@@ -11,7 +11,7 @@ var marco = new Twitter({ consumer_key: config.consumer_key, consumer_secret: co
 // Setup empty arrays to store parts of speech (staying global for a neat mapping hack)
 var parts = { "JJ": [], "NN": [], "NNP": [], "NNPS": [], "NNS": [], "VB": [], "VBG": [], "VBN": [], "RB": [], "RBR": [], "RBS": [] },
     people = [],
-    blacklist = ["i", "a", ".a", "it's", "rt", "am", "pm", "mt", "an", "the", "i'm", "i've"],
+    blacklist = ["i", "a", ".a", "it's", "rt", "am", "pm", "mt", "an", "the", "i'm", "i've", "", " "],
     mention = /(^|\W+)\@([\w\-]+)/gm
 
 // Listen for marco's tweets
